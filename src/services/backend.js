@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'http://46.101.16.81:3015/api/blogs';
+const baseUrl = 'http://46.101.16.81:3042/api/blogs';
 
 let token = null
 
@@ -10,7 +10,7 @@ const setToken = newToken => {
 
 const getAll = () => {
   const request = axios.get(baseUrl);
-  return request.then((response) => response.data).then((resdata)=>{
+  return request.then((response) => response.data).then((resdata) => {
     console.log(resdata);
     return resdata;
   });
@@ -22,11 +22,18 @@ const create = async newObject => {
 
   const response = await axios.post(baseUrl, newObject, config)
   return response.data
-}
+};
 
 const update = (id, newObject) => {
-  const request = axios.put(`${ baseUrl } /${id}`, newObject)
+  const request = axios.put(`${baseUrl}/${id}`, newObject)
   return request.then(response => response.data)
-}
+};
 
-export default { getAll, create, update, setToken }
+const remove = id => {
+  const config = {
+    headers: { Authorization: token }
+  }
+  return axios.delete(`${baseUrl}/${id}`, config)
+    .then((res) => res.data);
+};
+export default { getAll, create, update, remove, setToken }
