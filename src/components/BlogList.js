@@ -1,88 +1,76 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import noteService from '../services/backend'
 import Toggable from './Toggable'
 import BlogForm from './BlogForm'
 import PropTypes from 'prop-types'
 import BlogContent from './BlogContent'
+import { useDispatch, useSelector } from 'react-redux'
+import blogsReducer, { initializeBlog, updateBlog, deleteBlog } from '../reducers/blogsReducer'
 
-class BlogList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.props = props;
-        this.state = { blogs: [] };
+// 1. initial render 
+// 2. effect -- initblog -> fetches blogs from backend -> put in state
+// 3. addBlog -> add to state
 
-        this.updateLikes = this.updateLikes.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.addBlog = this.addBlog.bind(this);
+const BlogList = (props) => {
+    const dispatch = useDispatch()
+
+    let blogs = useSelector(state => state.blog) //coming from store.js
+
+    React.useEffect(() => {
+        dispatch(initializeBlog());
+    }, []);
+
+    const updateLikes = (blog) => {
+        dispatch(updateBlog(blog))
     }
 
-    componentDidMount() {
-        noteService.getAll().then((res) => {
-            this.setState({ blogs: res });
-        });
-    }
-
-    addBlog(blog) {
-        noteService
-            .create(blog)
-            .then(returnedBlog => {
-                this.props.newBlogMessage(returnedBlog.title);
-                const newBlogs = this.state.blogs.concat(returnedBlog);
-                this.setState({ blogs: newBlogs });
-            })
-        // setNewBlog('')
-    }
-
-    updateLikes(blog) {
-        blog.likes++;
-        noteService.update(blog.id, blog).then((res) => {
-            console.log('res = ', res);
-            const newBlogs = this.state.blogs.map((b) => {
-                if (b.id === blog.id) {
-                    b = res; // to make sure we actually get the updated blog from the backend- not just chaning it from the front it and might display only from th frontend 
-                }
-                return b;
-            });
-            console.log(newBlogs);
-            this.setState({ blogs: newBlogs });
-        });
-    }
-
-    handleDelete(blog) {
+    const handleDelete = (blog) => {
         const result = window.confirm('You are about to remove this blog')
         if (result) {
-            noteService.remove(blog.id).then((res) => {
-                const newBlogs = this.state.blogs.filter((b) => b.id !== blog.id);
-                this.setState({ blogs: newBlogs });
-            })
+            console.log('deeeelete', blog)
+            dispatch(deleteBlog(blog));
         }
     }
 
-    render() {
-        const user = this.props.user;
-        const blogs = this.state.blogs
-            .filter((blog) => {
-                if (!user) return true;
-                if (blog.user) return blog.user.username === user.username
-            })
-            .sort((a, b) => b.likes - a.likes);
+    const user = props.user;
 
+    console.log('PA blogs', blogs)
 
-        const blogElements = blogs.map((blog) => {
-            return (
-                <BlogContent blog={blog} updateLikes={this.updateLikes} handleDelete={this.handleDelete} />
-            );
-        })
-        return (
-            <div>
-                <Toggable buttonLabel='new blog' ref={this.props.noteFormRef} id="createBlogBtn">
-                    <BlogForm createBlog={this.addBlog} />
-                </Toggable>
-                <ul>
-                    {blogElements}
-                </ul >
-            </div>
-        );
+    //console.log('type of blogs', JSON.stringify(blogs))
+    blogs = blogs.filter((blog) => {
+        if (!user) return true;
+        if (blog.user) {
+            console.log(blog.user.username, '<- is this user equal to this user-> ', user.username)
+            return blog.user.username === user.username
+        }
+    })
+
+    // .sort((a, b) => b.likes - a.likes);
+    console.log('now the random blogs', blogs)
+
+    let s = new Set();
+    for (let i = 0; i < blogs.length; ++i) {
+        if (s.has(blogs[i].id)) {
+            console.log('repeated id: ', i, blogs[i].id);
+        }
+        s.add(blogs[i].id);
     }
+
+    const blogElements = blogs.map((blog) => {
+        return (
+            <BlogContent key={blog.id} blog={blog} updateLikes={updateLikes} handleDelete={handleDelete} />
+        );
+    })
+    return (
+        <div>
+            <Toggable buttonLabel='new blog' ref={props.noteFormRef} id="createBlogBtn">
+                <BlogForm user={user} />
+            </Toggable>
+            <p>blosg are </p>
+            <ul>
+                {blogElements}
+            </ul >
+        </div>
+    );
 }
 export default BlogList;

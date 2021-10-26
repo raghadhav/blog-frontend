@@ -1,80 +1,65 @@
-import logo from './logo.svg';
 import './App.css';
 import React, { useState, useEffect, useRef } from "react";
-import noteService from "./services/backend";
-import loginService from './services/login';
+import UsersPage from './components/Users.js'
+import Home from './components/Home'
+import BlogPage from './components/BlogPage'
+import SingleBlog from './components/SingleBlog'
 import LoginForm from './components/LoginForm'
 import Toggable from './components/Toggable'
-import BlogList from './components/BlogList'
+import noteService from "./services/backend";
+import loginService from './services/login';
+import { useDispatch, useSelector } from 'react-redux'
+import { showMsg } from './reducers/notificationReducer'
+import { saveUserInfo } from './reducers/loggedInUserReducer'
+import SingleUser from './components/SingleUser';
 
+import {
+  BrowserRouter as Router,
+  Switch, Route, useRouteMatch
+} from "react-router-dom"
 function App() {
+  const dispatch = useDispatch()
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useState(null)
-  const [msg, setMsge] = useState({
-    text: '',
-    theme: ''
-  });
-  const text = msg.text;
-  const theme = msg.theme;
-  const noteFormRef = useRef()
 
-  // to get the information of the logged in user from the localstorage and store in in noteservice
+  const user = useSelector(state => state.loggedInUser);
+  console.log('in the app', user)
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      noteService.setToken(user.token)
+      const LogedInuser = JSON.parse(loggedUserJSON)
+      dispatch(saveUserInfo(LogedInuser))
+      noteService.setToken(LogedInuser.token)
     }
-  }, [])
-
-
-  const showBlogMessage = (blogTitle) => {
-    noteFormRef.current.toggleVisibility();
-    setMsge({ text: `New blog added: ${blogTitle}`, theme: 'green' })
-    setTimeout(() => {
-      setMsge({ text: null, theme: '' })
-    }, 5000)
-  }
+  }, [dispatch])
 
   const handleLogin = async (event) => {
     event.preventDefault()
-
     try {
-      const user = await loginService.login({ // the token will be return from here 
+      const userReturend = await loginService.login({ // the token will be return from here 
         username, password,
       })
       window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
+        'loggedBlogappUser', JSON.stringify(userReturend)
       )
-      //from the loginservice we post username and passord we get the token 
-      // and now we save the token
-      noteService.setToken(user.token)
-      setUser(user)
+      noteService.setToken(userReturend.token)
+      dispatch(saveUserInfo(userReturend))
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setMsge({ text: 'Wrong Username of Password', theme: 'red' })
+      dispatch(showMsg('Wrong Username of Password', 'red'))
       setTimeout(() => {
-        setMsge({ text: null, theme: '' })
+        dispatch(showMsg(null, ''))
       }, 5000)
 
     }
-    console.log('logging in with', username, password)
   }
-
-  const Notification = (props) => {
-    if (props.text === "") return null;
-
-    else return <div style={{ color: props.theme }} id="notifClass"> {props.text}</div>;
-
-  };
   const handleLogout = (event) => {
     event.preventDefault()
     window.localStorage.removeItem('loggedBlogappUser')
-    setUser(null)
+    dispatch(saveUserInfo(null))
+
   }
   const toggableLoginForm = (
     <Toggable buttonLabel='login'>
@@ -88,21 +73,32 @@ function App() {
     </Toggable>
   );
 
-
   return (
-    <div className="App">
+    <Router>
       <h3>Blog App</h3>
-
-      <Notification text={text} theme={theme} />
-      {user === null ?
+      {!user ?
         toggableLoginForm :
         <div>
-          <p> {user.name} logged in </p><button onClick={handleLogout}>Logout</button>
-          <BlogList user={user} newBlogMessage={showBlogMessage} noteFormRef={noteFormRef} />
+          <p>{user.name} logged in</p><button onClick={handleLogout}>Logout</button>
         </div>
       }
-    </div>
-  );
-}
+      <Switch>
+        <Route path="/SingleUser/:id">
+          <SingleUser />
+        </Route>
 
+        <Route path="/users">
+          <UsersPage />
+        </Route>
+        <Route path="/blogs">
+          <BlogPage />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+    </Router>
+
+  )
+}
 export default App;

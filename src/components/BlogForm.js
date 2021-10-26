@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
+import { addNewBlog } from '../reducers/blogsReducer'
+import {showMsg} from '../reducers/notificationReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 const BlogForm = (props) => {
+    const dispatch = useDispatch()
+
     const [newBlog, setNewBlog] = useState('');
     const [newUrl, setNewUrl] = useState('');
 
@@ -21,9 +26,11 @@ const BlogForm = (props) => {
         const blog = {
             title: newBlog,
             url: newUrl,
-            likes: 0
+            likes: 0,
         }
-        props.createBlog(blog)
+        dispatch(addNewBlog(blog))
+        dispatch(showMsg('New Blog Added', 'green'))
+        // props.newBlogMessage(blog.title);
     }
 
     return (
@@ -43,7 +50,7 @@ const BlogForm = (props) => {
                     value={newUrl}
                     onChange={handleUrlChange}
                 />
-                <button type="submit" id ="saveBtn">save</button>
+                <button type="submit" id="saveBtn">save</button>
             </form>
         </div>
     )

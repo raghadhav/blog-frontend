@@ -11,7 +11,7 @@ const setToken = newToken => {
 const getAll = () => {
   const request = axios.get(baseUrl);
   return request.then((response) => response.data).then((resdata) => {
-    console.log(resdata);
+    console.log('inside getall', resdata);
     return resdata;
   });
 };
