@@ -1,5 +1,7 @@
 import { useDispatch } from 'react-redux'
 import blogService from '../services/backend'
+
+
 const blogsReducer = (state = [], action) => {
     console.log('blogs reducer');
 
@@ -8,9 +10,20 @@ const blogsReducer = (state = [], action) => {
             state = action.data;
             state = state.sort((a, b) => b.likes - a.likes);
             return state;
-        case 'new-blog': 
+        case 'new-blog':
             state = [...state, action.data];
             state.sort((a, b) => b.likes - a.likes);
+            return state;
+        case 'update-blog':
+            // arg: b2' (action.data)
+            // input:  [b0, b1, b2,  b3, b4]
+            // output: [b0, b1, b2', b3, b4]
+            state = state.map((blog) => {
+                if (blog.id === action.data.id) {
+                    return action.data;
+                }
+                else return blog;
+            });
             return state;
         case 'inc-likes':
             for (let i = 0; i < state.length; i++) {
@@ -39,12 +52,25 @@ export const addNewBlog = (newBlog) => {
 }
 
 export const updateBlog = (sentObj) => {
-    let newObj = {...sentObj};
+    let newObj = { ...sentObj };
     newObj.likes++;
     return async dispatch => {
         const resObj = await blogService.update(newObj.id, newObj)
         dispatch({
             type: 'inc-likes',
+            data: resObj
+        })
+    }
+}
+
+export const addComments = (sentObj, comment) => {
+    let newObj = { ...sentObj };
+    //if (newObj.comments === undefined) newObj.comments = [];
+    newObj.comments.push(comment);
+    return async dispatch => {
+        const resObj = await blogService.update(newObj.id, newObj)
+        dispatch({
+            type: 'update-blog',
             data: resObj
         })
     }

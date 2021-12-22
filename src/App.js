@@ -1,8 +1,9 @@
 import './App.css';
+import Navbar from 'react-bootstrap/Navbar'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState, useEffect, useRef } from "react";
 import UsersPage from './components/Users.js'
 import Home from './components/Home'
-import BlogPage from './components/BlogPage'
 import SingleBlog from './components/SingleBlog'
 import LoginForm from './components/LoginForm'
 import Toggable from './components/Toggable'
@@ -12,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { showMsg } from './reducers/notificationReducer'
 import { saveUserInfo } from './reducers/loggedInUserReducer'
 import SingleUser from './components/SingleUser';
-
+import BlogContent from './components/BlogContent';
 import {
   BrowserRouter as Router,
   Switch, Route, useRouteMatch
@@ -74,29 +75,51 @@ function App() {
   );
 
   return (
-    <Router>
-      <h3>Blog App</h3>
-      {!user ?
-        toggableLoginForm :
-        <div>
-          <p>{user.name} logged in</p><button onClick={handleLogout}>Logout</button>
-        </div>
-      }
-      <Switch>
-        <Route path="/SingleUser/:id">
-          <SingleUser />
-        </Route>
+    <Router >
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">Blog App</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Blogs</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/users/">Users</a>
+              </li>
 
-        <Route path="/users">
-          <UsersPage />
-        </Route>
-        <Route path="/blogs">
-          <BlogPage />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
+            </ul>
+          </div>
+        </div>
+      </nav>
+     
+        {!user ?
+          toggableLoginForm :
+          <div style={{display:'inline-block;'}}>
+            <p className="userNamelogin"> Welcome <p id="singleUserName">{user.name}</p> </p>
+            <button class="btn btn-link" onClick={handleLogout}>Logout</button>
+          </div>
+        }
+
+      <div>
+        <Switch>
+          <Route path="/SingleUser/:id">
+            <SingleUser />
+          </Route>
+          <Route path="/blogs/:id">
+            <BlogContent />
+          </Route>
+          <Route path="/users">
+            <UsersPage />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </div>
     </Router>
 
   )

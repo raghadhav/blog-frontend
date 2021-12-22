@@ -22,13 +22,13 @@ const Toggable = React.forwardRef((props, ref) => {
   })
   //if (props.offState && props.offState() === true) return null;
   return (
-    <div >
+    <div className="toggleForm">
       <div style={hideWhenVisible} >
-        <button onClick={toggleVisibility} >{props.buttonLabel}</button>
+        <button onClick={toggleVisibility} class="btn btn-success" >{props.buttonLabel}</button>
       </div>
-      <div style={showWhenVisible} className='testCom'>
+      <div style={showWhenVisible}>
         {props.children}
-        <button onClick={toggleVisibility}>cancel</button>
+        <button class="btn btn-secondary" onClick={toggleVisibility}>Cancel</button>
       </div>
     </div>
   )

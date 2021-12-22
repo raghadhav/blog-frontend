@@ -18,6 +18,7 @@ const Home = () => {
         <div className="App">
             <Notification />
             <div>
+        
                 <BlogList noteFormRef={noteFormRef} />
             </div>
         </div>

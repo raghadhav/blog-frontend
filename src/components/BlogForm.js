@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { addNewBlog } from '../reducers/blogsReducer'
-import {showMsg} from '../reducers/notificationReducer'
+import { showMsg } from '../reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const BlogForm = (props) => {
@@ -34,25 +34,48 @@ const BlogForm = (props) => {
     }
 
     return (
-        <div>
-            <h2>Create a new note</h2>
 
-            <form onSubmit={handleAddBlog}>
-                Blog Title <input
-                    id="titleInput"
-                    className='titleInput'
+        <form class="row g-3" onSubmit={handleAddBlog}>
+            <div class="col-md-12">
+                <label for="inputtitle" class="form-label">Blog Title</label>
+                <input class="form-control" id="titleInput"
+
                     value={newBlog}
-                    onChange={handleBlogChange}
-                />
-                Blog url <input
-                    id="urlInput"
-                    className='urlInput'
+                    onChange={handleBlogChange} />
+            </div>
+            <div class="col-md-12">
+                <label for="inputtitle" class="form-label">Blog URL</label>
+                <input type="text" id="urlInput"
+                    class="form-control"
                     value={newUrl}
-                    onChange={handleUrlChange}
-                />
-                <button type="submit" id="saveBtn">save</button>
-            </form>
-        </div>
+                    onChange={handleUrlChange} />
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">Save  </button>
+            </div>
+        </form>
+
+        // {/* <div>
+
+        // <h2>Create a new note</h2>
+
+        // <form onSubmit={handleAddBlog}>
+        //     Blog Title <input
+        //         id="titleInput"
+        //         className='titleInput'
+        //         value={newBlog}
+        //         onChange={handleBlogChange}
+        //     />
+        //     Blog url <input
+        //         id="urlInput"
+        //         className='urlInput'
+        //         value={newUrl}
+        //         onChange={handleUrlChange}
+        //     />
+        //     <button type="submit" id="saveBtn">Save</button>
+        // </form>
+        // </div> */}
     )
 }
 export default BlogForm;

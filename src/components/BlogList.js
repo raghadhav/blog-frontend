@@ -3,9 +3,12 @@ import noteService from '../services/backend'
 import Toggable from './Toggable'
 import BlogForm from './BlogForm'
 import PropTypes from 'prop-types'
-import BlogContent from './BlogContent'
 import { useDispatch, useSelector } from 'react-redux'
 import blogsReducer, { initializeBlog, updateBlog, deleteBlog } from '../reducers/blogsReducer'
+import {
+    BrowserRouter as Router,
+    Switch, Route, Link
+} from "react-router-dom"
 
 // 1. initial render 
 // 2. effect -- initblog -> fetches blogs from backend -> put in state
@@ -45,7 +48,6 @@ const BlogList = (props) => {
         }
     })
 
-    // .sort((a, b) => b.likes - a.likes);
     console.log('now the random blogs', blogs)
 
     let s = new Set();
@@ -56,20 +58,23 @@ const BlogList = (props) => {
         s.add(blogs[i].id);
     }
 
-    const blogElements = blogs.map((blog) => {
-        return (
-            <BlogContent key={blog.id} blog={blog} updateLikes={updateLikes} handleDelete={handleDelete} />
-        );
-    })
     return (
         <div>
-            <Toggable buttonLabel='new blog' ref={props.noteFormRef} id="createBlogBtn">
+           
+            <h3 id="blogTitle">Blogs are: </h3>
+            <ul>
+                {blogs.map(b =>
+                    <div class="list-group">
+                        <Link to={`/Blogs/${b.id}`} class="list-group-item list-group-item-action"> {b.title}</Link>
+                    </div>
+                )}
+                {/* {blogs.map(b=> 
+                    <li> <Link to={`/Blogs/${b.id}`}>{b.title}</Link></li>
+                )} */}
+            </ul >
+            <Toggable buttonLabel='New Blog' ref={props.noteFormRef}>
                 <BlogForm user={user} />
             </Toggable>
-            <p>blosg are </p>
-            <ul>
-                {blogElements}
-            </ul >
         </div>
     );
 }

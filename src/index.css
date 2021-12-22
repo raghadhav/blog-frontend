@@ -11,3 +11,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.menue{
+  list-style: none;
+  display: block;
+}
+.toggleForm{
+  margin-left: 10px;
+  padding: 10px;
+}
+.userNamelogin{
+  margin-left: 10px;
+
+}
+#singleUserName{
+  color: green;
+  display: inline;
+}
+#blogTitle{
+  color: black;
+  margin-left: 10px;
+}
+

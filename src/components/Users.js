@@ -31,23 +31,38 @@ const Users = () => {
     }, []);
 
     return (
-        <div >
-            <h2>Users</h2>
-            {/* <button onClick={showUser}>show user</button> */}
-            {/* {users === ''} ? <div> no</div> : */}
-            <div className='container'>
-                <div className='countTitle'>
-                    blogs created
-                </div>
-                <div className='users'>
-                    {users.map((u) => <div key={u.id}><Link to={`/SingleUser/${u.id}`}>{u.username}</Link></div>)}
-                </div>
-                <div className='blogCount'>
-                    {users.map((u) => <div key={u.id}>{u.blogs.length}</div>)}
-                </div>
-                {/* <Link to=''> {renderedUserd.username}</Link> */}
-            </div>
-        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Users</th>
+                    <th scope="col"> Blogs Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{users.map((u) => <div key={u.id}><Link to={`/SingleUser/${u.id}`}>{u.username}</Link></div>)}</td>
+                    <td>{users.map((u) => <div key={u.id}>{u.blogs.length}</div>)}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        // <div >
+        //     <h2>Users</h2>
+        //     {/* <button onClick={showUser}>show user</button> */}
+        //     {/* {users === ''} ? <div> no</div> : */}
+        //     <div className='container'>
+        //         <div className='countTitle'>
+        //             blogs created
+        //         </div>
+        //         <div className='users'>
+        //             {users.map((u) => <div key={u.id}><Link to={`/SingleUser/${u.id}`}>{u.username}</Link></div>)}
+        //         </div>
+        //         <div className='blogCount'>
+        //             {users.map((u) => <div key={u.id}>{u.blogs.length}</div>)}
+        //         </div>
+        //         {/* <Link to=''> {renderedUserd.username}</Link> */}
+        //     </div>
+        // </div>
     )
 }
 

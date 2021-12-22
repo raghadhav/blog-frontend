@@ -10,7 +10,7 @@ import {
 
 const DisplayBlog = (props) => {
     const blog = props.blog;
-
+console.log('blogggggggggg', blog);
     return (
         <li key={blog.id}>
             <Link to="/"><p>{blog.title}</p></Link>
@@ -62,14 +62,6 @@ const BlogPage = () => {
     return (
         <div className="blogsView">
 
-            {/* <h3>Users page</h3>
-
-            {user === null ?
-                toggableLoginForm :
-                <div>
-                    <p> {user.name} logged in </p><button onClick={handleLogout}>Logout</button>
-                </div>
-            } */}
             <h2>Blogs</h2>
             <ul>
                 {blogElements}

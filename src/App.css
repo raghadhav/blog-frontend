@@ -1,3 +1,11 @@
 .notifiMsg{
     color: red;
 }
+
+.sinlgeBlog{
+    margin-left: 10px;
+    border: 5px;
+}
+.square{
+    list-style-type: square;
+}
