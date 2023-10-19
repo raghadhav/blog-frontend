@@ -1,9 +1,9 @@
-import axios from 'axios'
-const baseUrl = 'http://localhost:3042/api/login'
+import axios from "axios";
+const baseUrl = `${process.env.REACT_APP_BACKEND_URL}/api/login`;
 
-const login = async credentials => {
-  const response = await axios.post(baseUrl, credentials)
-  return response.data
-}
+const login = async (credentials) => {
+  const response = await axios.post(baseUrl, credentials);
+  return response.data;
+};
 
-export default { login }
+export default { login };
