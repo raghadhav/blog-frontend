@@ -1,4 +1,5 @@
 {
+  "homepage": "/blogapp",
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
@@ -12,7 +13,6 @@
     "react-bootstrap": "^2.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.5",
-    "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
     "redux": "^4.1.0",
     "redux-devtools-extension": "^2.13.9",
@@ -49,6 +49,7 @@
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.7",
     "cypress": "^7.3.0",
-    "eslint-plugin-jest": "^24.3.6"
+    "eslint-plugin-jest": "^24.3.6",
+    "react-router-dom": "^6.17.0"
   }
 }

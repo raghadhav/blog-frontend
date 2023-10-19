@@ -14,12 +14,7 @@ import { showMsg } from "./reducers/notificationReducer";
 import { saveUserInfo } from "./reducers/loggedInUserReducer";
 import SingleUser from "./components/SingleUser";
 import BlogContent from "./components/BlogContent";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useRouteMatch,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 function App() {
   const dispatch = useDispatch();
 
@@ -78,12 +73,12 @@ function App() {
   );
 
   return (
-    <Router>
+    <Router basename={process.env.REACT_APP_PUBLIC_URL}>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-          <a class="navbar-brand" href="/">
+          <Link class="navbar-brand" to="/">
             Blog App
-          </a>
+          </Link>
           <button
             class="navbar-toggler"
             type="button"
@@ -98,14 +93,14 @@ function App() {
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/">
+                <Link class="nav-link active" aria-current="page" to="/">
                   Blogs
-                </a>
+                </Link>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/users/">
+                <Link class="nav-link" to="/users/">
                   Users
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -126,22 +121,12 @@ function App() {
         </div>
       )}
 
-      <div>
-        <Switch>
-          <Route path="/SingleUser/:id">
-            <SingleUser />
-          </Route>
-          <Route path="/blogs/:id">
-            <BlogContent />
-          </Route>
-          <Route path="/users">
-            <UsersPage />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
+      <Routes>
+        <Route path="/SingleUser/:id" element={<SingleUser />} />
+        <Route path="/blogs/:id" element={<BlogContent />} />
+        <Route path="/users" element={<UsersPage />} />
+        <Route path="/" element={<Home />} />
+      </Routes>
     </Router>
   );
 }
