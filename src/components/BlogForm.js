@@ -35,24 +35,24 @@ const BlogForm = (props) => {
 
     return (
 
-        <form class="row g-3" onSubmit={handleAddBlog}>
-            <div class="col-md-12">
-                <label for="inputtitle" class="form-label">Blog Title</label>
-                <input class="form-control" id="titleInput"
+        <form className="row g-3" onSubmit={handleAddBlog}>
+            <div className="col-md-12">
+                <label htmlFor="inputtitle" className="form-label">Blog Title</label>
+                <input className="form-control" id="titleInput"
 
                     value={newBlog}
                     onChange={handleBlogChange} />
             </div>
-            <div class="col-md-12">
-                <label for="inputtitle" class="form-label">Blog URL</label>
+            <div className="col-md-12">
+                <label htmlFor="inputtitle" className="form-label">Blog URL</label>
                 <input type="text" id="urlInput"
-                    class="form-control"
+                    className="form-control"
                     value={newUrl}
                     onChange={handleUrlChange} />
             </div>
 
-            <div class="col-12">
-                <button type="submit" class="btn btn-success">Save  </button>
+            <div className="col-12">
+                <button type="submit" className="btn btn-success">Save  </button>
             </div>
         </form>
 

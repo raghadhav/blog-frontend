@@ -24,13 +24,13 @@ const SingleUser = () => {
     return (
         <div>
             <h4>Bloged added by {usr.username}</h4>
-            <ol class="list-group list-group-numbered">
+            <ol className="list-group list-group-numbered">
                 {usr.blogs.map(b =>
-                    <li class="list-group-item d-flex justify-content-between align-items-start">
-                        <div class="ms-2 me-auto">
-                            <div class="">{b.title}</div>
+                    <li key={b.id} className="list-group-item d-flex justify-content-between align-items-start">
+                        <div className="ms-2 me-auto">
+                            <div className="">{b.title}</div>
                         </div>
-                        {/* <span class="badge bg-primary rounded-pill">14</span> */}
+                        {/* <span className="badge bg-primary rounded-pill">14</span> */}
                     </li>
                 )}
             </ol>

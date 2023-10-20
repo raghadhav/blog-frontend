@@ -9,6 +9,7 @@ import LoginForm from "./components/LoginForm";
 import Toggable from "./components/Toggable";
 import noteService from "./services/backend";
 import loginService from "./services/login";
+import registerService from "./services/register";
 import { useDispatch, useSelector } from "react-redux";
 import { showMsg } from "./reducers/notificationReducer";
 import { saveUserInfo } from "./reducers/loggedInUserReducer";
@@ -55,14 +56,60 @@ function App() {
       }, 5000);
     }
   };
+
+  const handleRegister = async (event) => {
+    event.preventDefault();
+    try {
+      const userReturend = await registerService.register({
+        // the token will be return from here
+        username,
+        password,
+      });
+      window.localStorage.setItem(
+        "loggedBlogappUser",
+        JSON.stringify(userReturend)
+      );
+      noteService.setToken(userReturend.token);
+      dispatch(saveUserInfo(userReturend));
+      setUsername("");
+      setPassword("");
+    } catch (exception) {
+      console.log(exception.response);
+      if (exception?.response?.data.error) {
+        dispatch(showMsg('error: ' + exception.response.data.error, "red"));
+      }
+      else {
+        dispatch(showMsg("error: Unable to register", "red"));
+      }
+      setTimeout(() => {
+        dispatch(showMsg(null, ""));
+      }, 5000);
+    }
+  }
+
   const handleLogout = (event) => {
     event.preventDefault();
     window.localStorage.removeItem("loggedBlogappUser");
     dispatch(saveUserInfo(null));
   };
+
+  const toggableRegisterForm = (
+    <Toggable buttonLabel="register">
+      <LoginForm
+        isLogin={false}
+        username={username}
+        password={password}
+        handleUsernameChange={({ target }) => setUsername(target.value)}
+        handlePasswordChange={({ target }) => setPassword(target.value)}
+        handleSubmit={handleRegister}
+      />
+    </Toggable>
+  );
+
   const toggableLoginForm = (
     <Toggable buttonLabel="login">
       <LoginForm
+        isLogin={true}
         username={username}
         password={password}
         handleUsernameChange={({ target }) => setUsername(target.value)}
@@ -74,13 +121,13 @@ function App() {
 
   return (
     <Router basename={process.env.REACT_APP_PUBLIC_URL}>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-          <Link class="navbar-brand" to="/">
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className="container-fluid">
+          <Link className="navbar-brand" to="/">
             Blog App
           </Link>
           <button
-            class="navbar-toggler"
+            className="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarNav"
@@ -88,17 +135,17 @@ function App() {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span class="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <Link class="nav-link active" aria-current="page" to="/">
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav">
+              <li className="nav-item">
+                <Link className="nav-link active" aria-current="page" to="/">
                   Blogs
                 </Link>
               </li>
-              <li class="nav-item">
-                <Link class="nav-link" to="/users/">
+              <li className="nav-item">
+                <Link className="nav-link" to="/users/">
                   Users
                 </Link>
               </li>
@@ -106,16 +153,20 @@ function App() {
           </div>
         </div>
       </nav>
-
-      {!user ? (
-        toggableLoginForm
+      
+      
+      {!(user?.username) ? (
+        <div>
+          {toggableLoginForm}
+          {toggableRegisterForm}
+        </div>
       ) : (
-        <div style={{ display: "inline-block;" }}>
-          <p className="userNamelogin">
+        <div style={{ display: "inline-block" }}>
+          <div className="userNamelogin">
             {" "}
-            Welcome <p id="singleUserName">{user.name}</p>{" "}
-          </p>
-          <button class="btn btn-link" onClick={handleLogout}>
+            Welcome <div id="singleUserName">{user.name}</div>{" "}
+          </div>
+          <button className="btn btn-link" onClick={handleLogout}>
             Logout
           </button>
         </div>

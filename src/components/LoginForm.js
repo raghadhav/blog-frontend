@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import '../index.css'
+
 const LoginForm = ({
+  isLogin,
   handleSubmit,
   handleUsernameChange,
   handlePasswordChange,
@@ -11,21 +13,21 @@ const LoginForm = ({
   return (
     <div>
       <form  onSubmit={handleSubmit}>
-        <div class="row mb-3">
-          <label for="inputEmail3" class="col-sm-1 col-form-label">Email</label>
-          <div class="col-sm-4">
-            <input  class="form-control" id="inputEmail3" value={username}
+        <div className="">
+          <label htmlFor="inputEmail3" className="">Email</label>
+          <div className="">
+            <input  className="form-control" id="inputEmail3" value={username}
              onChange={handleUsernameChange} />
           </div>
-        </div>
-        <div class="row mb-3">
-          <label for="inputPassword3" class="col-sm-1 col-form-label">Password</label>
-          <div class="col-sm-4">
-            <input type="password" class="form-control" id="inputPassword3" value={password}
+        </div>  
+        <div className="">
+          <label htmlFor="inputPassword3" className="">Password</label>
+          <div className="">
+            <input type="password" className="form-control" id="inputPassword3" value={password}
              onChange={handlePasswordChange}/>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">Sign in</button>
+        <button type="submit" className="btn btn-primary">{(isLogin) ? 'Sign In' : 'Register'}</button>
       </form>
     </div>
     )

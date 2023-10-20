@@ -64,8 +64,8 @@ const BlogList = (props) => {
             <h3 id="blogTitle">Blogs are: </h3>
             <ul>
                 {blogs.map(b =>
-                    <div class="list-group">
-                        <Link to={`/Blogs/${b.id}`} class="list-group-item list-group-item-action"> {b.title}</Link>
+                    <div className="list-group" key={b.id}>
+                        <Link to={`/Blogs/${b.id}`} className="list-group-item list-group-item-action"> {b.title}</Link>
                     </div>
                 )}
                 {/* {blogs.map(b=> 

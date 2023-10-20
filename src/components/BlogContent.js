@@ -32,25 +32,23 @@ const BlogContent = () => {
     }
 
     return (
-        <div className="sinlgeBlog">
+        <div className="singleBlog">
             <h3>Blog Title: {singleBlog.title}</h3>
             <div>
                 <p>Blog URL:{singleBlog.url}</p>
                 <p style={{ display: 'inline-block', color: 'blueviolet', marginRight: '10px' }}>likes:  {singleBlog.likes}</p>
-                <button onClick={() => updateLikes(singleBlog)} class="btn btn-primary">Like</button>
+                <button onClick={() => updateLikes(singleBlog)} className="btn btn-primary">Like</button>
                 <p>Added by: {singleBlog.author}</p>
             </div>
-            <div class="mb-3">
-
-                <input type="text" class="form-control" value={comment} onChange={handleCommentChange} placeholder='Add Your Comment' />
-               
+            <div className="mb-3">
+                <input type="text" className="form-control" value={comment} onChange={handleCommentChange} placeholder='Add Your Comment' />
             </div>
 
-            <button type="submit" class="btn btn-primary" onClick={addCommentsFunction}> Add Comment</button>
+            <button type="submit" className="btn btn-primary" onClick={addCommentsFunction}> Add Comment</button>
             
             <ul className="square">
                 {singleBlog.comments.map(c =>
-                    <li > {c}</li>
+                    <li key={c}> {c}</li>
                 )}
             </ul>
         </div>
